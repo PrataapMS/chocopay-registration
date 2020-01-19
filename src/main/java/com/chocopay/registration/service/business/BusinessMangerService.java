@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,7 +26,8 @@ public class BusinessMangerService {
         }
         if (!CollectionUtils.isEmpty(business.getUsers()) &&
                 business.getUsers().size() >= 1) {
-            return businessManager.save(business);
+            Business savedBusiness = businessManager.save(business);
+            savedBusiness.setUsers(new ArrayList<>());
         }
         return null;
     }
