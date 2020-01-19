@@ -1,9 +1,7 @@
 package com.chocopay.registration.controller;
 
-import com.chocopay.registration.base.entity.Business;
-import com.chocopay.registration.base.entity.Group;
-import com.chocopay.registration.base.entity.Role;
-import com.chocopay.registration.base.entity.User;
+import com.chocopay.registration.base.entity.*;
+import com.chocopay.registration.service.account.AccountMangerService;
 import com.chocopay.registration.service.business.BusinessMangerService;
 import com.chocopay.registration.service.group.GroupMangerService;
 import com.chocopay.registration.service.role.RoleMangerService;
@@ -22,13 +20,19 @@ public class RegistrationController {
     private final RoleMangerService roleMangerService;
     private final UserMangerService userMangerService;
     private final GroupMangerService groupMangerService;
+    private final AccountMangerService accountMangerService;
 
     @Autowired
-    public RegistrationController(BusinessMangerService businessMangerService, RoleMangerService roleMangerService, UserMangerService userMangerService, GroupMangerService groupMangerService) {
+    public RegistrationController(BusinessMangerService businessMangerService,
+                                  RoleMangerService roleMangerService,
+                                  UserMangerService userMangerService,
+                                  GroupMangerService groupMangerService,
+                                  AccountMangerService accountMangerService) {
         this.businessMangerService = businessMangerService;
         this.roleMangerService = roleMangerService;
         this.userMangerService = userMangerService;
         this.groupMangerService = groupMangerService;
+        this.accountMangerService = accountMangerService;
     }
 
     @PostMapping("/business/")
@@ -110,4 +114,25 @@ public class RegistrationController {
     public Callable<List<Role>> getAllRole() {
         return roleMangerService::getAllRole;
     }
+
+    @PostMapping("/account/")
+    public Callable<Account> saveAccount(@RequestBody Account account) {
+        return () -> accountMangerService.saveAccount(account);
+    }
+
+    @GetMapping("/account/{accountId}")
+    public Callable<Account> getAccount(@PathVariable Long accountId) {
+        return () -> accountMangerService.getAccount(accountId);
+    }
+
+    @DeleteMapping("/account/{accountId}")
+    public Callable<Boolean> removeAccount(@PathVariable Long accountId) {
+        return () ->  accountMangerService.removeAccount(accountId);
+    }
+
+    @GetMapping("/account/")
+    public Callable<List<Account>> getAllAccount() {
+        return accountMangerService::getAllAccount;
+    }
+
 }

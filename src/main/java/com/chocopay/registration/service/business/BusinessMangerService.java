@@ -4,6 +4,7 @@ import com.chocopay.registration.base.entity.Business;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -19,7 +20,14 @@ public class BusinessMangerService {
     }
 
     public Business saveBusiness(Business business) {
-        return businessManager.save(business);
+        if (business == null) {
+            return null;
+        }
+        if (!CollectionUtils.isEmpty(business.getUsers()) &&
+                business.getUsers().size() >= 1) {
+            return businessManager.save(business);
+        }
+        return null;
     }
 
     public Business getBusiness(Long businessId) {

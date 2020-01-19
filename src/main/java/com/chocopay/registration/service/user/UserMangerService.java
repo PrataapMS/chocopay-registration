@@ -2,6 +2,7 @@ package com.chocopay.registration.service.user;
 
 import com.chocopay.registration.base.entity.User;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,11 @@ public class UserMangerService {
     }
 
     public String login(String username, String password) {
-        return userManager.login(username,password);
+        String token = userManager.login(username, password);
+        if(StringUtils.isEmpty(token)){
+            return "no token found";
+        }
+        return token;
     }
 
     public Optional<org.springframework.security.core.userdetails.User> findByToken(String token) {
